@@ -13,11 +13,11 @@ import { Button } from '@/components/ui/button'
 
 export const SignIn = () => {
   return (
-    <div className="container">
+    <div className="container m-auto">
       <div className="grid min-h-screen place-content-center">
-        <div className="columns-2xs">
-          <Card>
-            <CardHeader className="text-center">
+        <Card className="grid grid-cols-2 m-0 p-0">
+          <div className="p-4">
+            <CardHeader className="text-center mb-5">
               <CardTitle>Bienvenido de nuevo</CardTitle>
               <CardDescription className="">Iniciar sesion</CardDescription>
             </CardHeader>
@@ -52,7 +52,7 @@ export const SignIn = () => {
                 <Button>Acceder</Button>
               </div>
             </CardContent>
-            <CardFooter className="grid gap-4">
+            <CardFooter className="grid gap-4 mt-5">
               <div className="text-center w-full">
                 ---- Or continue with ----
               </div>
@@ -65,8 +65,14 @@ export const SignIn = () => {
                 No tienes una cuenta? <a href="#">Registrate</a>
               </CardDescription>
             </CardFooter>
-          </Card>
-        </div>
+          </div>
+          <div className="m-0 p-0 h-full">
+            <img
+              className="h-full"
+              src="/placeholder.svg"
+            />
+          </div>
+        </Card>
       </div>
     </div>
   )
