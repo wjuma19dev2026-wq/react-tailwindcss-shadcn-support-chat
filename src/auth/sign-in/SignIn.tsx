@@ -19,7 +19,7 @@ export const SignIn = () => {
           <div className="p-4">
             <CardHeader className="text-center mb-5">
               <CardTitle>Bienvenido de nuevo</CardTitle>
-              <CardDescription className="">Iniciar sesion</CardDescription>
+              <CardDescription className="">Iniciar sesion </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
               <div className="grid gap-2">
@@ -57,9 +57,15 @@ export const SignIn = () => {
                 ---- Or continue with ----
               </div>
               <div className="flex justify-center gap-2">
-                <Button>Apple</Button>
-                <Button>Google</Button>
-                <Button>Facebook</Button>
+                <Button>
+                  <i className="fa-brands fa-apple"></i>
+                </Button>
+                <Button>
+                  <i className="fa-brands fa-google"></i>
+                </Button>
+                <Button>
+                  <i className="fa-brands fa-facebook-f"></i>
+                </Button>
               </div>
               <CardDescription className="text-center">
                 No tienes una cuenta? <a href="#">Registrate</a>
