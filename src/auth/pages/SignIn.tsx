@@ -10,9 +10,15 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 export const SignIn = () => {
+  const navigate = useNavigate()
+
+  const onHandleGoogle = () => {
+    navigate('/chat', { replace: true })
+  }
+
   return (
     <div className="container m-auto">
       <div className="grid min-h-screen place-content-center">
@@ -58,7 +64,7 @@ export const SignIn = () => {
                 <Button>
                   <i className="fa-brands fa-apple"></i>
                 </Button>
-                <Button>
+                <Button onClick={onHandleGoogle} className="cursor-pointer">
                   <i className="fa-brands fa-google"></i>
                 </Button>
                 <Button>
