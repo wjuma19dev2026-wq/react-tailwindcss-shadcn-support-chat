@@ -10,6 +10,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router'
 
 export const SignIn = () => {
   return (
@@ -34,10 +35,7 @@ export const SignIn = () => {
               <div className="grid gap-2">
                 <div className="grid grid-cols-[1fr_2fr]">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="text-right"
-                  >
+                  <a href="#" className="text-right">
                     Forgot your password?
                   </a>
                 </div>
@@ -49,7 +47,7 @@ export const SignIn = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Button>Acceder</Button>
+                <Button className="text-white">Acceder</Button>
               </div>
             </CardContent>
             <CardFooter className="grid gap-4 mt-5">
@@ -68,15 +66,15 @@ export const SignIn = () => {
                 </Button>
               </div>
               <CardDescription className="text-center">
-                No tienes una cuenta? <a href="#">Registrate</a>
+                No tienes una cuenta?{' '}
+                <Link to={'sign-up'} relative="path" viewTransition>
+                  Registrate
+                </Link>
               </CardDescription>
             </CardFooter>
           </div>
           <div className="m-0 p-0 h-full">
-            <img
-              className="h-full"
-              src="/placeholder.svg"
-            />
+            <img className="h-full" src="/placeholder.svg" />
           </div>
         </Card>
       </div>

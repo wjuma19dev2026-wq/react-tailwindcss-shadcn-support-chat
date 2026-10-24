@@ -1,15 +1,11 @@
-// import { AuthLayout } from './auth/layout/AuthLayout'
+import { AppRouter } from './AppRouter'
 
 import './App.css'
-import { ChatLayout, ChatPage } from './chat'
 
 export const App = () => {
   return (
     <>
-      {/*<AuthLayout />*/}
-      <ChatLayout>
-        <ChatPage />
-      </ChatLayout>
+      <AppRouter />
     </>
   )
 }

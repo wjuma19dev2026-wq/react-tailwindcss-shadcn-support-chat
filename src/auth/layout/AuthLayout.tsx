@@ -1,9 +1,9 @@
-import { SignIn } from '../'
+import { Outlet } from 'react-router'
 
 export const AuthLayout = () => {
   return (
     <>
-      <SignIn />
+      <Outlet />
     </>
   )
 }
