@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Copy, Download, ThumbsUp, ThumbsDown, Send } from 'lucide-react'
+import { useParams } from 'react-router'
 
 interface Message {
   role: 'agent' | 'user'
@@ -31,15 +32,14 @@ export const ChatPage = () => {
     },
   ])
 
+  const { clientId } = useParams()
+
   return (
     <div className="flex-1 flex flex-col">
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message, index) => (
-            <div
-              key={index}
-              className="w-full"
-            >
+            <div key={index} className="w-full">
               {message.role === 'agent' ? (
                 // Agent message - left aligned
                 <div className="flex gap-2 max-w-[80%]">
@@ -57,32 +57,16 @@ export const ChatPage = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                      >
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Copy className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                      >
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Download className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                      >
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <ThumbsUp className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                      >
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <ThumbsDown className="h-4 w-4" />
                       </Button>
                     </div>

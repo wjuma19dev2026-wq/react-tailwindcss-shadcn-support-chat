@@ -46,6 +46,14 @@ export const AppRouter = () => {
               </Suspense>
             }
           />
+          <Route
+            path="/chat/:clientId"
+            element={
+              <Suspense fallback={<Spinner />}>
+                <ChatPage />
+              </Suspense>
+            }
+          />
         </Route>
 
         {/*Redirect*/}
