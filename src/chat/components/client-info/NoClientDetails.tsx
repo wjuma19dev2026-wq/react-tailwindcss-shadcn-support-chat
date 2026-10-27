@@ -3,7 +3,7 @@ type NoClienteInfoProps = {
   description?: string
 }
 
-export const NoClienteInfo = ({
+export const NoClientDetails = ({
   title = 'Sin información del cliente',
   description = 'Selecciona un cliente para ver sus datos y detalles.',
 }: NoClienteInfoProps) => {

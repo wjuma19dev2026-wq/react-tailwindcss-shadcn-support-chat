@@ -1,4 +1,4 @@
-export const ClientInfoSkeleton = () => {
+export const ClientDetailsSkeleton = () => {
   return (
     <div className="w-80 border-l animate-pulse">
       <div className="h-14 border-b px-4 flex items-center">

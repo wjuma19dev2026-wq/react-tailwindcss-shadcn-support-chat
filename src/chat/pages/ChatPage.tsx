@@ -3,52 +3,65 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Copy, Download, ThumbsUp, ThumbsDown, Send } from 'lucide-react'
-import { useParams } from 'react-router'
-
-interface Message {
-  role: 'agent' | 'user'
-  content: string
-  timestamp: string
-}
+import { Link, useParams } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
+import { getClientMessages } from '@/fake/fake.data'
 
 export const ChatPage = () => {
   const [input, setInput] = useState('')
-  const [messages] = useState<Message[]>([
-    {
-      role: 'agent',
-      content: 'Hello, I am a generative AI agent. How may I assist you today?',
-      timestamp: '4:08:28 PM',
-    },
-    {
-      role: 'user',
-      content: "Hi, I'd like to check my bill.",
-      timestamp: '4:08:37 PM',
-    },
-    {
-      role: 'agent',
-      content:
-        "Please hold for a second.\n\nOk, I can help you with that\n\nI'm pulling up your current bill information\n\nYour current bill is $150, and it is due on August 31, 2024.\n\nIf you need more details, feel free to ask!",
-      timestamp: '4:08:37 PM',
-    },
-  ])
 
   const { clientId } = useParams()
 
+  const { data: messages = [], isLoading } = useQuery({
+    queryKey: ['messages', clientId],
+    queryFn: () => getClientMessages(clientId ?? ''),
+  })
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted-foreground/20 border-t-primary" />
+          <p className="text-sm font-medium text-muted-foreground">
+            Cargando conversación...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex-1 flex flex-col">
+      {messages.length === 0 && (
+        <div className="flex flex-1 items-center justify-center p-6">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-muted/20 px-8 py-10 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-xl">
+              💬
+            </div>
+            <div>
+              <p className="text-base font-medium">No hay mensajes</p>
+              <p className="text-sm text-muted-foreground">
+                Inicia la conversación con el cliente.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div key={index} className="w-full">
-              {message.role === 'agent' ? (
+              {message.sender === 'agent' ? (
                 // Agent message - left aligned
                 <div className="flex gap-2 max-w-[80%]">
                   <div className="h-8 w-8 rounded-full bg-primary flex-shrink-0" />
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">NexTalk</span>
+                      <Link to="/chat" className="cursor-pointer">
+                        <span className="text-sm font-medium ">NexTalk</span>
+                      </Link>
                       <span className="text-sm text-muted-foreground">
-                        {message.timestamp}
+                        {message.createdAt.toLocaleString()}
                       </span>
                     </div>
                     <div className="p-3 bg-muted/50 rounded-lg">
@@ -78,7 +91,7 @@ export const ChatPage = () => {
                   <div className="text-right mb-1">
                     <span className="text-sm font-medium mr-2">G5</span>
                     <span className="text-sm text-muted-foreground">
-                      {message.timestamp}
+                      {message.createdAt.toLocaleString()}
                     </span>
                   </div>
                   <div className="bg-black text-white p-3 rounded-lg max-w-[80%]">
@@ -92,6 +105,7 @@ export const ChatPage = () => {
           ))}
         </div>
       </ScrollArea>
+
       <div className="p-4 border-t">
         <div className="flex items-center gap-2">
           <Textarea

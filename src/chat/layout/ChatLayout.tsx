@@ -1,14 +1,8 @@
 import { Button } from '@/components/ui/button'
 
 import { X } from 'lucide-react'
-import { Outlet } from 'react-router'
-import {
-  ClientInfoSkeleton,
-  NoClienteInfo,
-  NoContactSelected,
-  ContactInfo,
-  LeftSidebar,
-} from '../components'
+import { Link, Outlet } from 'react-router'
+import { ClientDetails, LeftSidebar } from '../components'
 
 export const ChatLayout = () => {
   return (
@@ -18,7 +12,9 @@ export const ChatLayout = () => {
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
             <div className="h-6 w-6 rounded-full bg-primary" />
-            <span className="font-semibold">NexTalk</span>
+            <Link to="/chat">
+              <span className="font-semibold cursor-pointer">NexTalk</span>
+            </Link>
           </div>
         </div>
         {/*Sidebar Left*/}
@@ -40,14 +36,11 @@ export const ChatLayout = () => {
               </Button>
             </div>
           </header>
-          {/*<Outlet />*/}
-          <NoContactSelected />
+          <Outlet />
         </div>
 
         {/* Right Panel - Contact Details */}
-        {/*<ContactInfo />*/}
-        {/*<NoClienteInfo />*/}
-        <ClientInfoSkeleton />
+        <ClientDetails />
       </div>
     </div>
   )

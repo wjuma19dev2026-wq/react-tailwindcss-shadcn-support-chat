@@ -6,6 +6,7 @@ import { AuthLayout, SignIn, SignUp } from './auth'
 import { Spinner } from './shared'
 
 import { sleep } from './lib/Sleep'
+import { NoContactSelected } from './chat/components'
 
 // Lazy Load
 const ChatLayout = lazy(async () => {
@@ -42,7 +43,7 @@ export const AppRouter = () => {
             index
             element={
               <Suspense fallback={<Spinner />}>
-                <ChatPage />
+                <NoContactSelected />
               </Suspense>
             }
           />
