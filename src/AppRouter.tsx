@@ -1,12 +1,14 @@
-import { lazy, Suspense } from 'react'
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router'
+import { lazy, Suspense } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 import { AuthLayout, SignIn, SignUp } from './auth'
 import { Spinner } from './shared'
 
 import { sleep } from './lib/Sleep'
 import { NoContactSelected } from './chat/components'
+import { PrivateRoutes } from './chat'
+import { checkAuth } from './fake/fake.data'
 
 // Lazy Load
 const ChatLayout = lazy(async () => {
@@ -21,6 +23,32 @@ const ChatPage = lazy(() =>
 )
 
 export const AppRouter = () => {
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => {
+      const token = localStorage.getItem('token') ?? ''
+      console.log(token)
+
+      // ! SI el token no existe lanzar una exception
+      if (!token) {
+        throw new Error('No token found!.')
+      }
+
+      // ? Devuelve el usuario logged
+      return checkAuth(token)
+    },
+    retry: 0,
+  })
+
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <BrowserRouter>
       <Routes>
@@ -35,7 +63,9 @@ export const AppRouter = () => {
           path="/chat"
           element={
             <Suspense fallback={<Spinner />}>
-              <ChatLayout />
+              <PrivateRoutes isAuth={!!user}>
+                <ChatLayout />
+              </PrivateRoutes>
             </Suspense>
           }
         >

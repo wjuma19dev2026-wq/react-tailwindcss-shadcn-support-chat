@@ -1,3 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import {
   Card,
   CardContent,
@@ -12,12 +14,37 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Link, useNavigate } from 'react-router'
 
+import { loginUser } from '@/fake/fake.data'
+import { Loader2 } from 'lucide-react'
+
 export const SignIn = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
-  const onHandleGoogle = () => {
-    navigate('/chat', { replace: true })
-  }
+  /**
+   * El mutate no se llama de forma automatica como el useQuery
+   * tenemos que mandarlo a llamar con la function mutation, es una tarea
+   * asincrona, por lo que podemos llamarla con el async await
+   */
+  const {
+    isPending,
+    mutate: loginMutation,
+    isError,
+    erro,
+  } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: data => {
+      console.log('Impresion de la data: 🚀', data)
+      // Almacenar el token del usuario en el localStorage
+      localStorage.setItem('token', data.token)
+      // Invalidar query del usuario
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+      // Navegar a la pagina de chat con el replace true
+      navigate('/chat', { replace: true })
+    },
+  })
+
+  const onHandleGoogle = () => loginMutation()
 
   return (
     <div className="container m-auto">
@@ -32,6 +59,7 @@ export const SignIn = () => {
               <div className="grid gap-2">
                 <Label htmlFor="correo">Email</Label>
                 <Input
+                  className="p-3"
                   type="email"
                   name="correo"
                   id="correo"
@@ -46,6 +74,7 @@ export const SignIn = () => {
                   </a>
                 </div>
                 <Input
+                  className="p-3"
                   type="password"
                   name="password"
                   id="password"
@@ -53,21 +82,31 @@ export const SignIn = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Button className="text-white">Acceder</Button>
+                <Button className="cursor-pointer text-white rounded-sm border-0 p-3 flex align-middle">
+                  Acceder
+                </Button>
               </div>
             </CardContent>
             <CardFooter className="grid gap-4 mt-5">
               <div className="text-center w-full">
                 ---- Or continue with ----
               </div>
-              <div className="flex justify-center gap-2">
-                <Button>
+              <div className="flex justify-center gap-2 ">
+                <Button className="cursor-pointer text-white p-3 flex justify-center rounded-sm border-0">
                   <i className="fa-brands fa-apple"></i>
                 </Button>
-                <Button onClick={onHandleGoogle} className="cursor-pointer">
-                  <i className="fa-brands fa-google"></i>
+                <Button
+                  onClick={onHandleGoogle}
+                  disabled={isPending}
+                  className="cursor-pointer text-white p-3 flex justify-center rounded-sm border-0"
+                >
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <i className="fa-brands fa-google"></i>
+                  )}
                 </Button>
-                <Button>
+                <Button className="cursor-pointer text-white p-3 flex justify-center rounded-sm border-0">
                   <i className="fa-brands fa-facebook-f"></i>
                 </Button>
               </div>
