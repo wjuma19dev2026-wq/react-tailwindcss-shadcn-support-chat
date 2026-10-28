@@ -11,7 +11,7 @@ export const ChatLayout = () => {
       <div className="w-64 border-r bg-muted/10">
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-primary" />
+            <div className="h-6 w-6 rounded-full bg-primary text-white" />
             <Link to="/chat">
               <span className="font-semibold cursor-pointer">NexTalk</span>
             </Link>

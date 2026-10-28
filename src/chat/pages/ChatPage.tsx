@@ -4,18 +4,47 @@ import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Copy, Download, ThumbsUp, ThumbsDown, Send } from 'lucide-react'
 import { Link, useParams } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
-import { getClientMessages } from '@/fake/fake.data'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getClientMessages, sendMessage } from '@/fake/fake.data'
+import type { Message } from '../interfaces/chat.interface'
 
 export const ChatPage = () => {
   const [input, setInput] = useState('')
 
   const { clientId } = useParams()
 
+  const queryClient = useQueryClient()
+
+  const { mutate: sendMessageMutation } = useMutation({
+    mutationFn: sendMessage,
+    onSuccess: (newMessage: Message) => {
+      // Setear la data del objeto de nuevo mensaje en la query y cache
+      queryClient.setQueryData(
+        ['messages', clientId],
+        (oldMessages: Message[]) => {
+          if (!oldMessages) {
+            return [newMessage]
+          }
+          return [...oldMessages, newMessage]
+        },
+      )
+    },
+  })
+
   const { data: messages = [], isLoading } = useQuery({
     queryKey: ['messages', clientId],
     queryFn: () => getClientMessages(clientId ?? ''),
   })
+
+  const handleSubmit = () => {
+    // TODO: Llamar la mutationFn
+    sendMessageMutation({
+      clientId: clientId ?? '',
+      content: input,
+      createdAt: new Date(),
+      sender: 'agent',
+    })
+  }
 
   if (isLoading) {
     return (
@@ -51,7 +80,7 @@ export const ChatPage = () => {
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div key={index} className="w-full">
-              {message.sender === 'agent' ? (
+              {message.sender === 'client' ? (
                 // Agent message - left aligned
                 <div className="flex gap-2 max-w-[80%]">
                   <div className="h-8 w-8 rounded-full bg-primary flex-shrink-0" />
@@ -112,9 +141,12 @@ export const ChatPage = () => {
             placeholder="Type a message as a customer"
             value={input}
             onChange={e => setInput(e.target.value)}
-            className="min-h-[44px] h-[44px] resize-none py-3"
+            className="min-h-[44px] h-[44px] resize-none p-3 border-0 scroll-fade"
           />
-          <Button className="h-[44px] px-4 flex items-center gap-2">
+          <Button
+            onClick={handleSubmit}
+            className="h-[44px] text-white px-4 rounded-3xl flex items-center gap-2 cursor-pointer hover:bg-black/80"
+          >
             <Send className="h-4 w-4" />
             <span>Send</span>
           </Button>
